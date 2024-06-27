@@ -30,13 +30,51 @@ async function run() {
         const database = client.db('swapnashray');
         const booksCollection = database.collection('books');
 
+        app.get('/category/books', async (req, res) => {
+            const { category } = req.query;
+
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 20;
+            const skip = (page - 1) * limit;
+
+            console.log(category);
+
+            const query = { bookCategory: category };
+            if (category === 'all') {
+                const books = await booksCollection.find().skip(skip).limit(limit).toArray();
+                const totalBooks = await booksCollection.countDocuments();
+                const totalPage = Math.ceil(totalBooks / limit);
+                res.send({ books, totalPage, totalBooks });
+            }
+            else {
+                const books = await booksCollection.find(query).skip(skip).limit(limit).toArray();
+                const totalBooks = await booksCollection.countDocuments();
+                const totalPage = Math.ceil(totalBooks / limit);
+                res.send({ books, totalPage, totalBooks });
+            }
+        })
+
+        app.post('/add-book', async (req, res) => {
+            const bookInfo = req.body;
+            const { bookIdentityNo } = bookInfo;
+            const query = { bookIdentityNo: bookIdentityNo }
+            const findBook = await booksCollection.findOne(query);
+            if (findBook) {
+                res.send({ message: 'already added this book' })
+                return;
+            }
+            const result = await booksCollection.insertOne(bookInfo);
+            res.send(result)
+            // console.log(bookInfo);
+        })
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
-        await client.close();
+        // await client.close();
     }
 }
 run().catch(console.dir);
