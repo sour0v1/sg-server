@@ -53,6 +53,19 @@ async function run() {
                 res.send({ books, totalPage, totalBooks });
             }
         })
+        
+        app.get('/search-books', async (req, res) => {
+            const {searchValue} = req.query;
+            // console.log(searchValue);
+            const result = await booksCollection.find({
+                $or : [
+                    {'bookName' : {$regex : searchValue, $options : 'i'}},
+                    {'author' : {$regex : searchValue, $options : 'i'}}
+                ]
+            }).toArray();
+            res.send(result)
+            console.log(result);
+        })
 
         app.post('/add-book', async (req, res) => {
             const bookInfo = req.body;
