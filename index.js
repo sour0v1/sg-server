@@ -54,18 +54,33 @@ async function run() {
                 res.send({ books, totalPage, totalBooks });
             }
         })
-        
+
         app.get('/search-books', async (req, res) => {
-            const {searchValue} = req.query;
+            const { searchValue } = req.query;
             // console.log(searchValue);
             const result = await booksCollection.find({
-                $or : [
-                    {'bookName' : {$regex : searchValue, $options : 'i'}},
-                    {'author' : {$regex : searchValue, $options : 'i'}}
+                $or: [
+                    { 'bookName': { $regex: searchValue, $options: 'i' } },
+                    { 'author': { $regex: searchValue, $options: 'i' } }
                 ]
             }).toArray();
             res.send(result)
             console.log(result);
+        })
+
+        app.get('/members', async (req, res) => {
+            const { category } = req.query;
+            console.log(category);
+
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 20;
+            const skip = (page - 1) * limit;
+
+            const query = { memberCategory: category }
+            const result = await membersCollection.find(query).skip(skip).limit(limit).toArray();
+            const totalMembers = await membersCollection.countDocuments();
+            const totalPage = Math.ceil(totalMembers / limit);
+            res.send({result, totalPage, totalMembers })
         })
         // post request
         app.post('/add-book', async (req, res) => {
