@@ -29,6 +29,7 @@ async function run() {
 
         const database = client.db('swapnashray');
         const booksCollection = database.collection('books');
+        const membersCollection = database.collection('members');
 
         app.get('/category/books', async (req, res) => {
             const { category } = req.query;
@@ -66,7 +67,7 @@ async function run() {
             res.send(result)
             console.log(result);
         })
-
+        // post request
         app.post('/add-book', async (req, res) => {
             const bookInfo = req.body;
             const { bookIdentityNo } = bookInfo;
@@ -79,6 +80,13 @@ async function run() {
             const result = await booksCollection.insertOne(bookInfo);
             res.send(result)
             // console.log(bookInfo);
+        })
+
+        app.post('/add-member', async (req, res) => {
+            const memberInfo = req.body;
+            console.log(memberInfo);
+            const result = await membersCollection.insertOne(memberInfo);
+            res.send(result);
         })
 
 
