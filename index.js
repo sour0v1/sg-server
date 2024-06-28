@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.xhnq0hd.mongodb.net/?appName=Cluster0`;
 // console.log(uri)
 
@@ -93,6 +93,13 @@ async function run() {
             const totalApplications = await applicationCollection.countDocuments();
             const totalPage = Math.ceil(totalApplications / limit);
             res.send({ result, totalPage, totalApplications });
+        })
+
+        app.get('/get-application', async (req, res) => {
+            const {id} = req.query;
+            const query = {_id : new ObjectId(id)};
+            const result = await applicationCollection.findOne(query);
+            res.send(result)
         })
 
         // post request
