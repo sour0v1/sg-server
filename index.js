@@ -30,6 +30,7 @@ async function run() {
         const database = client.db('swapnashray');
         const booksCollection = database.collection('books');
         const membersCollection = database.collection('members');
+        const applicationCollection = database.collection('applications');
 
         app.get('/category/books', async (req, res) => {
             const { category } = req.query;
@@ -80,8 +81,20 @@ async function run() {
             const result = await membersCollection.find(query).skip(skip).limit(limit).toArray();
             const totalMembers = await membersCollection.countDocuments();
             const totalPage = Math.ceil(totalMembers / limit);
-            res.send({result, totalPage, totalMembers })
+            res.send({ result, totalPage, totalMembers })
         })
+
+        app.get('/get-applications', async (req, res) => {
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 20;
+            const skip = (page - 1) * limit;
+
+            const result = await applicationCollection.find().skip(skip).limit(limit).toArray();
+            const totalApplications = await applicationCollection.countDocuments();
+            const totalPage = Math.ceil(totalApplications / limit);
+            res.send({ result, totalPage, totalApplications });
+        })
+
         // post request
         app.post('/add-book', async (req, res) => {
             const bookInfo = req.body;
@@ -101,6 +114,13 @@ async function run() {
             const memberInfo = req.body;
             console.log(memberInfo);
             const result = await membersCollection.insertOne(memberInfo);
+            res.send(result);
+        })
+
+        app.post('/member-application', async (req, res) => {
+            const applicantInfo = req.body;
+            console.log(applicantInfo);
+            const result = await applicationCollection.insertOne(applicantInfo);
             res.send(result);
         })
 
