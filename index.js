@@ -131,6 +131,20 @@ async function run() {
             res.send(result);
         })
 
+        app.post('/add-reader-member', async (req, res) => {
+            const memberInfo = req.body;
+            const {id} = req.query;
+            const query = {_id : new ObjectId(id)}
+            console.log(memberInfo);
+            const addMember = await membersCollection.insertOne(memberInfo);
+            // console.log(addMember)
+            if(addMember.insertedId){
+                const deleteMember = await applicationCollection.deleteOne(query);
+                // console.log(deleteMember)
+                res.send(deleteMember);
+            }
+        })
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
