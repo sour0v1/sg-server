@@ -31,6 +31,7 @@ async function run() {
         const booksCollection = database.collection('books');
         const membersCollection = database.collection('members');
         const applicationCollection = database.collection('applications');
+        const userCollection = database.collection('users');
 
         app.get('/category/books', async (req, res) => {
             const { category } = req.query;
@@ -39,7 +40,7 @@ async function run() {
             const limit = parseInt(req.query.limit) || 20;
             const skip = (page - 1) * limit;
 
-            console.log(category);
+            // console.log(category);
 
             const query = { bookCategory: category };
             if (category === 'all') {
@@ -66,7 +67,7 @@ async function run() {
                 ]
             }).toArray();
             res.send(result)
-            console.log(result);
+            // console.log(result);
         })
 
         app.get('/members', async (req, res) => {
@@ -100,6 +101,15 @@ async function run() {
             const query = {_id : new ObjectId(id)};
             const result = await applicationCollection.findOne(query);
             res.send(result)
+        })
+
+        app.get('/get-user', async (req, res) => {
+            const {userEmail} = req.query;
+            // console.log(userEmail);
+            const query = {email : userEmail}
+            const result = await userCollection.findOne(query);
+            const role = result?.role;
+            res.send(role)
         })
 
         // post request
@@ -143,6 +153,13 @@ async function run() {
                 // console.log(deleteMember)
                 res.send(deleteMember);
             }
+        })
+
+        app.post('/user', async (req, res) => {
+            const userInfo = req.body;
+            // console.log(userInfo);
+            const result = await userCollection.insertOne(userInfo);
+            res.send(result);
         })
 
 
