@@ -5,7 +5,10 @@ const cors = require('cors');
 const port = process.env.PORT || 5000;
 
 // middleware
-app.use(cors());
+app.use(cors({
+    origin : ['https://swapnashray-granthagar.web.app', 'http://localhost:5174', 'http://localhost:5173' ],
+    credentials : true
+}));
 app.use(express.json());
 
 
@@ -72,7 +75,7 @@ async function run() {
 
         app.get('/members', async (req, res) => {
             const { category } = req.query;
-            console.log(category);
+            // console.log(category);
 
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 20;
@@ -129,14 +132,14 @@ async function run() {
 
         app.post('/add-member', async (req, res) => {
             const memberInfo = req.body;
-            console.log(memberInfo);
+            // console.log(memberInfo);
             const result = await membersCollection.insertOne(memberInfo);
             res.send(result);
         })
 
         app.post('/member-application', async (req, res) => {
             const applicantInfo = req.body;
-            console.log(applicantInfo);
+            // console.log(applicantInfo);
             const result = await applicationCollection.insertOne(applicantInfo);
             res.send(result);
         })
@@ -145,7 +148,7 @@ async function run() {
             const memberInfo = req.body;
             const {id} = req.query;
             const query = {_id : new ObjectId(id)}
-            console.log(memberInfo);
+            // console.log(memberInfo);
             const addMember = await membersCollection.insertOne(memberInfo);
             // console.log(addMember)
             if(addMember.insertedId){
@@ -164,7 +167,7 @@ async function run() {
 
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
