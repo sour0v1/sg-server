@@ -5,10 +5,7 @@ const cors = require('cors');
 const port = process.env.PORT || 5000;
 
 // middleware
-app.use(cors({
-    origin : ['https://swapnashray-granthagar.web.app', 'http://localhost:5174', 'http://localhost:5173' ],
-    credentials : true
-}));
+app.use(cors());
 app.use(express.json());
 
 
@@ -35,6 +32,7 @@ async function run() {
         const membersCollection = database.collection('members');
         const applicationCollection = database.collection('applications');
         const userCollection = database.collection('users');
+        const requestedBookCollection = database.collection('requestedBooks');
 
         app.get('/category/books', async (req, res) => {
             const { category } = req.query;
@@ -165,9 +163,16 @@ async function run() {
             res.send(result);
         })
 
+        app.post('/request-book', async (req, res) => {
+            const info = req.body;
+            console.log(info);
+            const result = await requestedBookCollection.insertOne(info);
+            res.send(result);
+        })
+
 
         // Send a ping to confirm a successful connection
-        // await client.db("admin").command({ ping: 1 });
+        await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
