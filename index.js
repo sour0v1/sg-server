@@ -113,6 +113,14 @@ async function run() {
             res.send(role)
         })
 
+        app.get(`/requested-books`, async (req, res) => {
+            const {email} = req.query;
+            console.log(email);
+            const query = {userEmail : email};
+            const result = await requestedBookCollection.find(query).toArray();
+            res.send(result);
+        })
+
         // post request
         app.post('/add-book', async (req, res) => {
             const bookInfo = req.body;
@@ -167,6 +175,14 @@ async function run() {
             const info = req.body;
             console.log(info);
             const result = await requestedBookCollection.insertOne(info);
+            res.send(result);
+        })
+
+        app.delete('/req-delete', async (req, res) => {
+            const {id} = req.query;
+            console.log(id);
+            const query = { _id : new ObjectId(id)}
+            const result = await requestedBookCollection.deleteOne(query);
             res.send(result);
         })
 
