@@ -121,6 +121,11 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/all-req-books', async (req, res) => {
+            const result = await requestedBookCollection.find().toArray();
+            res.send(result);
+        })
+
         // post request
         app.post('/add-book', async (req, res) => {
             const bookInfo = req.body;
@@ -176,6 +181,21 @@ async function run() {
             console.log(info);
             const result = await requestedBookCollection.insertOne(info);
             res.send(result);
+        })
+
+        app.post('/confirm-req-book', async (req, res) => {
+            const {tDate, gDate, id} = req.query;
+            console.log(tDate, gDate, id);
+            const query = {_id : new ObjectId(id)};
+            const updReqBook = {
+                $set : {
+                    takenDate : tDate,
+                    givenDate : gDate
+                }
+            }
+            const result = await requestedBookCollection.updateOne(query, updReqBook);
+            res.send(result);
+           
         })
 
         app.delete('/req-delete', async (req, res) => {
