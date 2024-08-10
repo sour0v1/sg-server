@@ -33,6 +33,7 @@ async function run() {
         const applicationCollection = database.collection('applications');
         const userCollection = database.collection('users');
         const requestedBookCollection = database.collection('requestedBooks');
+        const receivedBookCollection = database.collection('receivedBooks');
 
         app.get('/category/books', async (req, res) => {
             const { category } = req.query;
@@ -121,8 +122,22 @@ async function run() {
             res.send(result);
         })
 
+        app.get(`/all-given-books`, async (req, res) => {
+            const query = {
+                takenDate : {$exists : true}
+            }
+            const result = await requestedBookCollection.find(query).toArray();
+            res.send(result);
+        })
+        
+
         app.get('/all-req-books', async (req, res) => {
             const result = await requestedBookCollection.find().toArray();
+            res.send(result);
+        })
+
+        app.get('/all-received-books', async (req, res) => {
+            const result = await receivedBookCollection.find().toArray();
             res.send(result);
         })
 
@@ -196,6 +211,22 @@ async function run() {
             const result = await requestedBookCollection.updateOne(query, updReqBook);
             res.send(result);
            
+        })
+
+        app.post('/book-received', async (req, res) => {
+            const {id, name} = req.query;
+            console.log('id -', id);
+            const query = {_id : new ObjectId(id)}
+            const getBook = await requestedBookCollection.findOne(query);
+            // console.log(getBook);
+            getBook.receivedBy = name;
+            const result = await receivedBookCollection.insertOne(getBook);
+            // console.log('res', result);
+            if(result?.insertedId){
+                const delPrevBook = await requestedBookCollection.deleteOne(query);
+                console.log(delPrevBook)
+                res.send(delPrevBook);
+            }
         })
 
         app.delete('/req-delete', async (req, res) => {
