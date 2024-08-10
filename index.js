@@ -116,7 +116,7 @@ async function run() {
 
         app.get(`/requested-books`, async (req, res) => {
             const {email} = req.query;
-            console.log(email);
+            // console.log(email);
             const query = {userEmail : email};
             const result = await requestedBookCollection.find(query).toArray();
             res.send(result);
@@ -193,14 +193,14 @@ async function run() {
 
         app.post('/request-book', async (req, res) => {
             const info = req.body;
-            console.log(info);
+            // console.log(info);
             const result = await requestedBookCollection.insertOne(info);
             res.send(result);
         })
 
         app.post('/confirm-req-book', async (req, res) => {
             const {tDate, gDate, id} = req.query;
-            console.log(tDate, gDate, id);
+            // console.log(tDate, gDate, id);
             const query = {_id : new ObjectId(id)};
             const updReqBook = {
                 $set : {
@@ -215,7 +215,7 @@ async function run() {
 
         app.post('/book-received', async (req, res) => {
             const {id, name} = req.query;
-            console.log('id -', id);
+            // console.log('id -', id);
             const query = {_id : new ObjectId(id)}
             const getBook = await requestedBookCollection.findOne(query);
             // console.log(getBook);
@@ -224,14 +224,14 @@ async function run() {
             // console.log('res', result);
             if(result?.insertedId){
                 const delPrevBook = await requestedBookCollection.deleteOne(query);
-                console.log(delPrevBook)
+                // console.log(delPrevBook)
                 res.send(delPrevBook);
             }
         })
 
         app.delete('/req-delete', async (req, res) => {
             const {id} = req.query;
-            console.log(id);
+            // console.log(id);
             const query = { _id : new ObjectId(id)}
             const result = await requestedBookCollection.deleteOne(query);
             res.send(result);
