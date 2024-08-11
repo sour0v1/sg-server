@@ -72,6 +72,14 @@ async function run() {
             // console.log(result);
         })
 
+        app.get('/get-user-info', async (req, res) => {
+            const {email} = req.query;
+            console.log(email);
+            const query = {email : email};
+            const result = await userCollection.findOne(query);
+            res.send(result);
+        })
+
         app.get('/members', async (req, res) => {
             const { category } = req.query;
             // console.log(category);
@@ -227,6 +235,24 @@ async function run() {
                 // console.log(delPrevBook)
                 res.send(delPrevBook);
             }
+        })
+
+        app.post('/edit-profile', async (req, res) => {
+            const {name, email, profession, mobile, address} = req.body;
+            console.log(name, email, profession, mobile, address);
+            const query = {email : email};
+            const updInfo = {
+                $set  : {
+                    name : name,
+                    email : email,
+                    profession : profession,
+                    mobile : mobile,
+                    address : address
+                }
+            }
+            const result = await userCollection.updateOne(query, updInfo);
+            console.log(result);
+            res.send(result);
         })
 
         app.delete('/req-delete', async (req, res) => {
