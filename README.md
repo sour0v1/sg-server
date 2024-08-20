@@ -1,4 +1,4 @@
-This repository contains the Express.js server code for [Swapnashray-Granthagar](https://github.com/sour0v1/sg-client). The platform allows users to explore, search, and borrow books. The backend is managed using Express and MongoDB.
+This repository contains the Express.js server code for [Swapnashray-Granthagar](https://github.com/sour0v1/sg-client). The platform allows users to explore, search, and borrow books. The backend is managed using Express and MongoDB, with JWT used for authentication.
 
 ## How to use
   ### Prerequisites
@@ -21,6 +21,7 @@ Create a **.env** file in the root directory and add the following environment v
 ```
 MONGODB_USER=your_mongodb_user_name
 MONGOD_PASSWORD=your_mongodb_password
+JWT_SECRET=your_jwt_secret_key
 ```
 ### Running the server
 ```
@@ -29,6 +30,9 @@ node index.js
 The server will automatically restart when changes are detected, and it will run on **http://localhost:5000** by default.
 
 ## Technology Used
- - **Backend: ** Express.js
- - **Database: ** MongoDB
+- **Backend:** Express.js
+- **Database:** MongoDB
+- **Authentication:** JWT(JSON Web Tokens)
+- **Environment Variables:** dotenv
+
   
