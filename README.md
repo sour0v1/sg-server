@@ -16,4 +16,10 @@ This repository contains the Express.js server code for [Swapnashray-Granthagar]
  ```
 npm install
  ```
+### Environment Variables
+Create a **.env** file in the root directory and add the following environment variables:
+```
+MONGODB_USER=your_mongodb_user_name
+MONGOD_PASSWORD=your_mongodb_password
+```
   
