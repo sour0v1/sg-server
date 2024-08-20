@@ -5,7 +5,7 @@ This repository contains the Express.js server code for [Swapnashray-Granthagar]
   Make sure you have the following installed: 
    - **Node.js**
    - **npm**
-   - **MongoDB**
+   - **MongoDB**(local or cloud)
   ### Installation
   **1. Clone the repository:**
   ```
