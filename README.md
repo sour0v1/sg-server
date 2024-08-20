@@ -22,4 +22,6 @@ Create a **.env** file in the root directory and add the following environment v
 MONGODB_USER=your_mongodb_user_name
 MONGOD_PASSWORD=your_mongodb_password
 ```
+### Running the server
+`node index.js`
   
