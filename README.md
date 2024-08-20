@@ -9,7 +9,7 @@ This repository contains the Express.js server code for [Swapnashray-Granthagar]
   #### Installation
   **1. Clone the repository:**
       ```
-      git clone https://github.com/sour0v1/sg-server.git
+      git clone https://github.com/sour0v1/sg-server.git  
       cd sg-server
       ```
   
