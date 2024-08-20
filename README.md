@@ -27,4 +27,8 @@ MONGOD_PASSWORD=your_mongodb_password
 node index.js
 ```
 The server will automatically restart when changes are detected, and it will run on **http://localhost:5000** by default.
+
+## Technology Used
+ - **Backend: ** Express.js
+ - **Database: ** MongoDB
   
